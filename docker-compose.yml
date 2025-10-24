@@ -1,0 +1,22 @@
+services:
+  ingest:
+    container_name: ingest-data
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: python ingest.py
+
+  llm-chatbot-app:
+    container_name: llm-chatbot-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ingest
+    command: python app.py
